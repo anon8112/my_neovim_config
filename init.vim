@@ -6,8 +6,16 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'neomake/neomake'
 Plug 'rust-lang/rust.vim'
 Plug 'racer-rust/vim-racer'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'sebastianmarkow/deoplete-rust'
+Plug 'artur-shaik/vim-javacomplete2'
+Plug 'leafgarland/typescript-vim'
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'Quramy/tsuquyomi'
+Plug 'digitaltoad/vim-pug'
 
 call plug#end()
+
 " General
 syntax enable
 filetype plugin indent on
@@ -27,19 +35,22 @@ highlight clear SignColumn
 
 " Plugin conf
 
-" 	neomake
-autocmd! BufReadPost,BufWritePost * Neomake
-autocmd BufWritePost *.rs Neomake! cargo
+"	deoplete
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources#rust#racer_binary = "$HOME/.cargo/bin/racer"
+let g:deoplete#sources#rust#rust_src_path = "$HOME/.multirust/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"
 
+" 	neomake
+
+autocmd! BufWritePost *.cpp *.ts Neomake
 let g:neomake_serialize = 1
 let g:neomake_serialize_abort_on_error = 1
 
-" Fuzzyfinder
-set rtp+=~/.fzf
+"	java
+autocmd FileType java setlocal omnifunc=javacomplete#Complete
 
 
-" 	racer-rust
-set hidden
-let g:racer_cmd = "$HOME/.cargo/bin/racer"
-let $RUST_SRC_PATH="$HOME/.multirust/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"
-let g:racer_experimental_completer = 1
+" 	rust
+autocmd! BufWritePost *.rs NeomakeProject cargo
+command CargoBuild execute "!cargo build --target=asmjs-unknown-emscripten"
+command Cargo execute "!cargo run"
