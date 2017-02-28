@@ -8,21 +8,25 @@ Plug 'rust-lang/rust.vim'
 Plug 'racer-rust/vim-racer'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'sebastianmarkow/deoplete-rust'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'artur-shaik/vim-javacomplete2'
 Plug 'leafgarland/typescript-vim'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'Quramy/tsuquyomi'
 Plug 'digitaltoad/vim-pug'
+Plug 'zchee/deoplete-jedi'
 
 call plug#end()
 
 " General
+set clipboard=unnamed
+
 syntax enable
 filetype plugin indent on
 
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
 
 " Colors
 if (has("termguicolors"))
@@ -52,5 +56,5 @@ autocmd FileType java setlocal omnifunc=javacomplete#Complete
 
 " 	rust
 autocmd! BufWritePost *.rs NeomakeProject cargo
-command CargoBuild execute "!cargo build --target=asmjs-unknown-emscripten"
+command CargoBuild execute "!cargo build"
 command Cargo execute "!cargo run"
